@@ -1,0 +1,15 @@
+[package]
+name = "pdf-leitura-extensa-skill"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "pdf_toolkit"
+path = "script/main.rs"
+
+[profile.release]
+opt-level = "z"
+lto = true
+strip = true
+panic = "abort"

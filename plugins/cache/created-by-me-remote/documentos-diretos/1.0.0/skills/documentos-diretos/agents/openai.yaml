@@ -1,0 +1,4 @@
+interface:
+  display_name: "Documentos Diretos"
+  short_description: "Documentos completos, sem conversa paralela"
+  default_prompt: "Use $documentos-diretos para elaborar o documento solicitado e entregar apenas a versão final."

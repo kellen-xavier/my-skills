@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+skill_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+cache_root="${XDG_CACHE_HOME:-${HOME}/.cache}/codex-skills/pdf-toolkit"
+binary="$cache_root/build/release/pdf_toolkit"
+
+needs_build=0
+if [[ ! -x "$binary" ]]; then
+  needs_build=1
+elif find "$skill_dir" -type f \( -name '*.rs' -o -name 'Cargo.toml' \) -newer "$binary" -print -quit | grep -q .; then
+  needs_build=1
+fi
+
+if (( needs_build )); then
+  if ! command -v cargo >/dev/null 2>&1; then
+    printf 'pdf-toolkit: Rust/Cargo is required for the first run.\n' >&2
+    exit 127
+  fi
+  mkdir -p "$cache_root/build"
+  cargo build --release --manifest-path "$skill_dir/Cargo.toml" --target-dir "$cache_root/build"
+fi
+
+exec "$binary" "$@"
